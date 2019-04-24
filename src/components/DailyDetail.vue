@@ -150,12 +150,6 @@
             avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
             content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
             datetime: moment().subtract(1, 'days')
-          },
-          {
-            author: 'Han Solo',
-            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-            datetime: moment().subtract(2, 'days')
           }
         ],
         avatarName: '盖世英雄',
@@ -169,11 +163,12 @@
         moment
       }
     },
-    beforeCreate: async function(){
-      // this.data = await axios.get('/frontend/daily/queryById',
-      //   {params:{
-      //       id: this.$router.params.id,
-      //     }})
+    created: async function(){
+      const ddf = await axios.get('/frontend/daily/queryById',
+        {params:{
+            id: this.$route.params.id,
+          }})
+      console.log('ddf---',ddf)
     },
     methods: {
       like() {

@@ -11,7 +11,7 @@ export const asyncRouterMap = [
     name: 'dashboard',
     component: TabLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard/workplace',
+    redirect: '/community',
     children: [
       //系统监控
       {
@@ -310,7 +310,7 @@ export  const communityMap = [
         meta: { title: '日常物品', hideHeader: true, keepAlive: true, permission: ['user'] },
       },
       {
-        path: '/dailyDetail/:id',
+        path: '/dailyDetail',
         name: 'dailyDetail',
         component: () => import('@/components/DailyDetail'),
         meta: { title: '日常物品详情页', keepAlive: true, permission: ['user'] }

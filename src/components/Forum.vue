@@ -7,111 +7,117 @@
         </a-collapse-panel>
       </a-collapse>
     </div>
-    <div style="display: flex;margin-top: 40px">
-    <a-input-search
-      placeholder="请输入评论内容"
-      v-model="inputValue"
-      @search="onSearch"
-      enterButton
-    ></a-input-search>
-      <a-button @click="clearInput">Cancel</a-button></div>
-    <a-comment v-for="(c, index) in commentList" :key="c.comments_id">
-      <template slot="actions" style="text-align: right;">
-        <span @click="reply(c)">回复</span>
-        <span @click="takeComment(c, index)">查看评论</span>
-        <span v-show="c.isDisplay === true" @click="() => { c.isDisplay = false}"><a-icon type="up" />收起评论</span>
-      </template>
-      <a slot="author">{{c.name}}</a>
-      <a-avatar
-        :src='"http://localhost:8080/jeecg-boot/"+c.url'
-        :alt="c.name"
-        slot="avatar"
-      />
-      <p class="comment-content" slot="content">{{c.content}}</p>
-      <a-tooltip slot="datetime" :title="moment(c.time).format('MMMM Do YYYY, h:mm:ss')">
-        <span>{{moment(c.create_time).fromNow()}}</span>
-      </a-tooltip>
-
-      <a-comment v-if="c.isReply">
-        <a-avatar
-          slot="avatar"
-          :src='"http://localhost:8080/jeecg-boot/"+c.url'
-          :alt="c.name"
-        />
-        <div slot="content">
-          <a-form-item>
-            <a-textarea :rows="4" v-model="value"></a-textarea>
-          </a-form-item>
-          <a-form-item>
-            <a-button
-              htmlType="submit"
-              :loading="submitting"
-              @click="handleSubmit(c, index)"
-              type="primary"
-              class="comment-button"
-            >
-              提交
-            </a-button>
-            <a-button
-              @click="() => { c.isReply=!c.isReply}"
-              class="comment-button"
-            >
-              取消
-            </a-button>
-          </a-form-item>
-        </div>
-      </a-comment>
-      <a-comment v-if="c.isDisplay" v-for="comment in c.comments" :key="comment.id">
-        <template slot="actions">
-          <span @click="reply(comment)">回复</span>
-          <span  @click="() => { c.isDisplay = false}"><a-icon type="up" />收起评论</span>
-        </template>
-        <a slot="author">{{comment.name}}</a>
-        <a-avatar
-          :src='"http://localhost:8080/jeecg-boot/"+comment.url'
-          :alt="comment.name"
-          slot="avatar"
-        />
-        <p class="comment-content" slot="content">{{comment.content}}</p>
-        <a-tooltip slot="datetime" :title="moment(comment.create_time).format('MMMM Do YYYY, h:mm:ss')">
-          <span>{{moment(comment.create_time).fromNow()}}</span>
-        </a-tooltip>
-
-        <a-comment v-if="comment.isReply">
+    <a-tabs defaultActiveKey="1" @change="callback">
+      <a-tab-pane tab="实时" key="1">
+        <div style="display: flex;margin-top: 40px">
+        <a-input-search
+          placeholder="请输入评论内容"
+          v-model="inputValue"
+          @search="onSearch"
+          enterButton
+        ></a-input-search>
+        <a-button @click="clearInput">Cancel</a-button></div>
+        <a-comment v-for="(c, index) in commentList" :key="c.comments_id">
+          <template slot="actions" style="text-align: right;">
+            <span @click="reply(c)">回复</span>
+            <span @click="takeComment(c, index)">查看评论</span>
+            <span v-show="c.isDisplay === true" @click="() => { c.isDisplay = false}"><a-icon type="up" />收起评论</span>
+          </template>
+          <a slot="author">{{c.name}}</a>
           <a-avatar
+            :src='"http://localhost:8080/jeecg-boot/"+c.url'
+            :alt="c.name"
             slot="avatar"
-            :src='"http://localhost:8080/jeecg-boot/"+comment.url'
-            :alt="comment.name"
           />
-          <div slot="content">
-            <a-form-item>
-              <a-textarea :rows="4" v-model="value"></a-textarea>
-            </a-form-item>
-            <a-form-item>
-              <a-button
-                htmlType="submit"
-                :loading="submitting"
-                @click="handleSubmit(comment.comments_id)"
-                class="comment-button"
-                type="primary"
-              >
-                提交
-              </a-button>
-              <a-button
-                @click="() => { comment.isReply=!comment.isReply}"
-                class="comment-button"
-              >
-                取消
-              </a-button>
-            </a-form-item>
-          </div>
-        </a-comment>
+          <p class="comment-content" slot="content">{{c.content}}</p>
+          <a-tooltip slot="datetime" :title="moment(c.time).format('MMMM Do YYYY, h:mm:ss')">
+            <span>{{moment(c.create_time).fromNow()}}</span>
+          </a-tooltip>
 
-      </a-comment>
-    </a-comment>
-    <template>
-      <a-pagination showQuickJumper :defaultCurrent="1" :total="totalNum" @change="chagePage" />
-    </template>
+          <a-comment v-if="c.isReply">
+            <a-avatar
+              slot="avatar"
+              :src='"http://localhost:8080/jeecg-boot/"+c.url'
+              :alt="c.name"
+            />
+            <div slot="content">
+              <a-form-item>
+                <a-textarea :rows="4" v-model="value"></a-textarea>
+              </a-form-item>
+              <a-form-item>
+                <a-button
+                  htmlType="submit"
+                  :loading="submitting"
+                  @click="handleSubmit(c, index)"
+                  type="primary"
+                  class="comment-button"
+                >
+                  提交
+                </a-button>
+                <a-button
+                  @click="() => { c.isReply=!c.isReply}"
+                  class="comment-button"
+                >
+                  取消
+                </a-button>
+              </a-form-item>
+            </div>
+          </a-comment>
+          <a-comment v-if="c.isDisplay" v-for="comment in c.comments" :key="comment.id">
+            <template slot="actions">
+              <span @click="reply(comment)">回复</span>
+              <span  @click="() => { c.isDisplay = false}"><a-icon type="up" />收起评论</span>
+            </template>
+            <a slot="author">{{comment.name}}</a>
+            <a-avatar
+              :src='"http://localhost:8080/jeecg-boot/"+comment.url'
+              :alt="comment.name"
+              slot="avatar"
+            />
+            <p class="comment-content" slot="content">{{comment.content}}</p>
+            <a-tooltip slot="datetime" :title="moment(comment.create_time).format('MMMM Do YYYY, h:mm:ss')">
+              <span>{{moment(comment.create_time).fromNow()}}</span>
+            </a-tooltip>
+
+            <a-comment v-if="comment.isReply">
+              <a-avatar
+                slot="avatar"
+                :src='"http://localhost:8080/jeecg-boot/"+comment.url'
+                :alt="comment.name"
+              />
+              <div slot="content">
+                <a-form-item>
+                  <a-textarea :rows="4" v-model="value"></a-textarea>
+                </a-form-item>
+                <a-form-item>
+                  <a-button
+                    htmlType="submit"
+                    :loading="submitting"
+                    @click="handleSubmit(comment.comments_id)"
+                    class="comment-button"
+                    type="primary"
+                  >
+                    提交
+                  </a-button>
+                  <a-button
+                    @click="() => { comment.isReply=!comment.isReply}"
+                    class="comment-button"
+                  >
+                    取消
+                  </a-button>
+                </a-form-item>
+              </div>
+            </a-comment>
+
+          </a-comment>
+        </a-comment>
+        <template>
+          <a-pagination showQuickJumper :defaultCurrent="1" :total="totalNum" @change="chagePage" />
+        </template>
+      </a-tab-pane>
+      <a-tab-pane tab="圈子" key="2">待补充</a-tab-pane>
+      <a-tab-pane tab="关注" key="3">待补充</a-tab-pane>
+    </a-tabs>
   </div>
 </template>
 <script>
