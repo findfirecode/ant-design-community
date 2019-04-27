@@ -132,7 +132,6 @@
       </a-col>
     </a-row>
     <a-tabs defaultActiveKey="1">
-      <a-tab-pane tab="关注" key="1">Content of Tab Pane 1</a-tab-pane>
       <a-tab-pane tab="新鲜" key="2"><a-row style="padding-top: 50px;">
         <a-col :span="8" v-for="c in cartList" :key='c.daily_id'>
           <a-card
@@ -159,6 +158,7 @@
 
         </a-col>
       </a-row></a-tab-pane>
+      <a-tab-pane tab="关注" key="1">Content of Tab Pane 1</a-tab-pane>
       <a-tab-pane tab="排行榜" key="3">Content of Tab Pane 3</a-tab-pane>
     </a-tabs>
     <template>

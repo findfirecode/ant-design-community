@@ -370,4 +370,4 @@ export const constantRouterMap = [
       }
     ]
   }
-].concat(asyncRouterMap).concat(communityMap)
+].concat(communityMap)

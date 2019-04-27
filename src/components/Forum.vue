@@ -7,7 +7,7 @@
         </a-collapse-panel>
       </a-collapse>
     </div>
-    <a-tabs defaultActiveKey="1" @change="callback">
+    <a-tabs defaultActiveKey="1">
       <a-tab-pane tab="实时" key="1">
         <div style="display: flex;margin-top: 40px">
         <a-input-search
@@ -115,7 +115,42 @@
           <a-pagination showQuickJumper :defaultCurrent="1" :total="totalNum" @change="chagePage" />
         </template>
       </a-tab-pane>
-      <a-tab-pane tab="圈子" key="2">待补充</a-tab-pane>
+<!--      <a-tab-pane tab="圈子" key="2"><template>-->
+<!--      <a-card title="我的圈子">-->
+<!--        <a-card-grid style="width:25%;textAlign:'center'"><a-icon type="plus" />新建圈子</a-card-grid>-->
+<!--        <a-card-grid style="width:25%;textAlign:'center'">Content</a-card-grid>-->
+<!--        <a-card-grid style="width:25%;textAlign:'center'">Content</a-card-grid>-->
+<!--        <a-card-grid style="width:25%;textAlign:'center'">Content</a-card-grid>-->
+<!--      </a-card>-->
+<!--      <a-card>-->
+<!--        <h4 style="fontSize: 14px;color: rgba(0, 0, 0, 0.85); marginBottom: 16px;fontWeight: 500"-->
+<!--        >-->
+<!--          这是标题-->
+<!--        </h4>-->
+<!--        <p>这才是内容</p>-->
+<!--        <a-row type="flex" justify="center" align="top">-->
+<!--          <a-col span="6">-->
+<!--            <img src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" class="card-img">-->
+<!--          </a-col>-->
+<!--          <a-col span="6">-->
+<!--            <img src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" class="card-img">-->
+<!--          </a-col>-->
+<!--          <a-col span="6">-->
+<!--            <img src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" class="card-img">-->
+<!--          </a-col>-->
+<!--          <a-col span="6">-->
+<!--            <img src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" class="card-img">-->
+<!--          </a-col>-->
+<!--          <a-col span="6">-->
+<!--            <img src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" class="card-img">-->
+<!--          </a-col>-->
+<!--          <a-col span="6">-->
+<!--            <img src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" class="card-img">-->
+<!--          </a-col>-->
+<!--        </a-row>-->
+<!--      </a-card>-->
+<!--    </template>-->
+<!--    </a-tab-pane>-->
       <a-tab-pane tab="关注" key="3">待补充</a-tab-pane>
     </a-tabs>
   </div>
@@ -123,8 +158,11 @@
 <script>
   import moment from 'moment';
   import { axios } from '@/utils/request'
+  import ARow from "ant-design-vue/es/grid/Row";
+  import ACol from "ant-design-vue/es/grid/Col";
 
   export default {
+    components: {ACol, ARow},
     data() {
       return {
         action: null,
@@ -143,13 +181,13 @@
         inputValue:''
       }
     },
-    beforeCreate: async function() {
-      this.commentList = await axios.get('/frontend/comments/list',
-        {params:{ pageNo: 1,
-          pageSize:10,
-        }})
-      this.totalNum = await axios.get('/frontend/comments/total')
-    },
+    // beforeCreate: async function() {
+    //   this.commentList = await axios.get('/frontend/comments/list',
+    //     {params:{ pageNo: 1,
+    //       pageSize:10,
+    //     }})
+    //   this.totalNum = await axios.get('/frontend/comments/total')
+    // },
     methods: {
        getList(params){
         console.log(params)
@@ -222,5 +260,8 @@
   }
   .ant-form-item-control{
     text-align: right;
+  }
+  .card-img {
+
   }
 </style>
