@@ -131,7 +131,6 @@
 
 <script>
   import JeecgDemoModal from './modules/JeecgDemoModal'
-  import JSuperQuery from '@/components/jeecg/JSuperQuery.vue';
   import JeecgDemoTabsModal from './modules/JeecgDemoTabsModal'
   import {initDictOptions, filterDictText} from '@/components/dict/JDictSelectUtil'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
