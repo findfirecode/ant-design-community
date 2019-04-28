@@ -1,4 +1,3 @@
-<!--
 <template>
   <div :class="[prefixCls]">
     <ul>
@@ -14,7 +13,6 @@
     </ul>
   </div>
 </template>
--->
 
 <script>
   import Avatar from 'ant-design-vue/es/avatar'
