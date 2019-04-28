@@ -33,7 +33,6 @@ import {
 } from "@/store/mutation-types"
 import config from '@/defaultSettings'
 
-import JDictSelectTag from './components/dict/index.js'
 import hasPermission from '@/utils/hasPermission'
 
 Vue.config.productionTip = false
@@ -52,7 +51,6 @@ Vue.use(Antd)
 Vue.use(VueAxios, router)
 Vue.use(Viser)
 Vue.use(hasPermission)
-Vue.use(JDictSelectTag)
 Vue.use(Print)
 Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
