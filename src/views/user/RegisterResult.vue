@@ -1,25 +1,25 @@
 <template>
-  <result
-    :isSuccess="true"
-    :content="false"
-    :title="email"
-    :description="description">
+<!--  <result-->
+<!--    :isSuccess="true"-->
+<!--    :content="false"-->
+<!--    :title="email"-->
+<!--    :description="description">-->
 
-    <template slot="action">
-      <a-button size="large" type="primary">查看邮箱</a-button>
-      <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回首页</a-button>
-    </template>
+<!--    <template slot="action">-->
+<!--      <a-button size="large" type="primary">查看邮箱</a-button>-->
+<!--      <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回首页</a-button>-->
+<!--    </template>-->
 
-  </result>
+<!--  </result>-->
 </template>
 
 <script>
-  import Result from '@/views/result/Result'
+  // import Result from '@/views/result/Result'
 
   export default {
     name: "RegisterResult",
     components: {
-      Result
+      // Result
     },
     data () {
       return {

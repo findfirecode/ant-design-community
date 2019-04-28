@@ -1,5 +1,7 @@
 import { UserLayout, TabLayout, RouteView, BlankLayout, PageView } from '@/components/layouts'
 import CommunityView from '@comp/layouts/CommunityView'
+
+export const asyncRouterMap = []
 /**
  * 社区路由
  */
