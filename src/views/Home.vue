@@ -1,3 +1,4 @@
+<!--
 <template>
   <div class="home">
     <div class="banner">
@@ -161,3 +162,4 @@
     margin: 25px 0;
   }
 </style>
+-->
