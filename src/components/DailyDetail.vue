@@ -1,37 +1,22 @@
 <template>
   <div style="background-color: #fff;">
     <div class="avatar-title">
-      <a-avatar :size="48" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
-      <span class="title-span">{{ this.avatarName }}</span>
+      <a-avatar :size="48" :src='baseUrl+dailyDetail.avatar'/>
+      <span class="title-span">{{ this.dailyDetail.name }}</span>
     </div>
     <div class="imgDispaly">
       <a-carousel arrows dotsClass="slick-dots slick-thumb">
         <a slot="customPaging" slot-scope="props">
-          <img :src="getImgUrl(props.i)"/>
+          <img :src="baseUrl+imgUrls[0]"/>
         </a>
-        <div v-for="item in 4">
-          <img :src="baseUrl+'abstract0'+item+'.jpg'"/>
+        <div v-for="item in imgUrls">
+          <img :src="baseUrl+item"/>
         </div>
       </a-carousel>
     </div>
     <div class="daily-content">
-      <h1>这是一首情歌</h1>
-      <p>V-T If you complete something, you finish doing, making, or producing it. 完成
-        例：
-        Peter Mayle has just completed his first novel.
-        彼得·梅尔刚完成他的第一本小说。
-        9.
-        completion N-VAR 完成
-        例：
-        The project is nearing completion.
-        该项目快完成了。
-        10.
-        V-T If you complete something, you do all of it. 完成 [no cont]
-        例：
-        She completed her degree in two years.
-        她在两年内修完了学位。
-        11.
-        V-T If you complete a form or questionnaire, you write the answers or information asked for in it. 填写 (表格、问卷)</p>
+      <h1>{{ this.dailyDetail.title }}</h1>
+      <p>{{ this.dailyDetail.content }}</p>
       <div class="action-button">
         <a-button
           type="primary"
@@ -143,15 +128,9 @@
     name: 'dailyDetail',
     data() {
       return {
-        baseUrl: 'https://raw.githubusercontent.com/vueComponent/ant-design-vue/master/components/vc-slick/assets/img/react-slick/',
-        data: [
-          {
-            author: 'Han Solo',
-            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-            datetime: moment().subtract(1, 'days')
-          }
-        ],
+        baseUrl: 'http://localhost:8080/community/',
+        dailyDetail: {},
+        data:{},
         avatarName: '盖世英雄',
         likes: 0,
         dislikes: 0,
@@ -160,15 +139,21 @@
         joinText: '参入',
         imgUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         isReply: false,
+        imgUrls:[],
         moment
       }
     },
-    created: async function(){
-      const ddf = await axios.get('/frontend/daily/queryById',
+    beforeCreate: async function(){
+      const daily = await axios.get('/frontend/daily/queryById',
         {params:{
             id: this.$route.params.id,
           }})
-      console.log('ddf---',ddf)
+      this.dailyDetail = daily
+      this.imgUrls = await axios.get('/frontend/daily/queryByBelongId',
+        {params:{
+            belong_id: this.$route.params.id,
+          }})
+      console.log(this.imgUrls)
     },
     methods: {
       like() {

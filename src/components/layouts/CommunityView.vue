@@ -58,7 +58,8 @@
     },
     methods: {
       handleClick(o) {
-        window.location.href = `/${o.key}`
+        // window.location.href =`/${o.key}`
+        this.$router.push(`/${o.key}`)
       }
     }
   }

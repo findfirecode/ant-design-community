@@ -235,6 +235,7 @@
             await axios.post('/frontend/daily/add', daily)
             this.addDailyModel = false
             this.$message.success('发布成功');
+            this.$router.go(0)
           }
         });
       },
