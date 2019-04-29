@@ -8,7 +8,7 @@ export const asyncRouterMap = []
 export  const communityMap = [
   // community
   {
-    path: '/community',
+    path: '/',
     component: CommunityView,
     name: 'account',
     meta: { title: '社区主页', icon: 'user', keepAlive: true, permission: ['user'] },

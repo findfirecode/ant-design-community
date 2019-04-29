@@ -25,7 +25,7 @@
           </template>
           <a slot="author">{{c.name}}</a>
           <a-avatar
-            :src='"http://localhost:8080/jeecg-boot/"+c.url'
+            :src='"http://localhost:8080/community/"+c.url'
             :alt="c.name"
             slot="avatar"
           />
@@ -37,7 +37,7 @@
           <a-comment v-if="c.isReply">
             <a-avatar
               slot="avatar"
-              :src='"http://localhost:8080/jeecg-boot/"+c.url'
+              :src='"http://localhost:8080/community/"+c.url'
               :alt="c.name"
             />
             <div slot="content">
@@ -70,7 +70,7 @@
             </template>
             <a slot="author">{{comment.name}}</a>
             <a-avatar
-              :src='"http://localhost:8080/jeecg-boot/"+comment.url'
+              :src='"http://localhost:8080/community/"+comment.url'
               :alt="comment.name"
               slot="avatar"
             />
@@ -82,7 +82,7 @@
             <a-comment v-if="comment.isReply">
               <a-avatar
                 slot="avatar"
-                :src='"http://localhost:8080/jeecg-boot/"+comment.url'
+                :src='"http://localhost:8080/community/"+comment.url'
                 :alt="comment.name"
               />
               <div slot="content">
