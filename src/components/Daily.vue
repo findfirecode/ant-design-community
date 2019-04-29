@@ -3,134 +3,100 @@
     <a-affix :offsetTop="this.top" :style="{ position: 'absolute', left:'13%',top: '1%'}">
       <a-button type="primary" @click=""><a-icon type="cloud-upload"/> 上传</a-button>
     </a-affix>
-    <a-row>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="二手手机">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="数码">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="游戏交易">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="二手图书">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="家具家电">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="服饰鞋包">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="车位">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-      <a-col span="6">
-        <a-card
-          hoverable
-          style="width: 240px"
-        >
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            slot="cover"
-          />
-          <a-card-meta
-            title="超值租">
-          </a-card-meta>
-        </a-card>
-      </a-col>
-    </a-row>
+    <a-card title="所有分类">
+      <a-card-grid style="width:25%;textAlign:'center'">二手手机</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">数码</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">游戏交易</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">二手图书</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">家具家电</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">服饰鞋包</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">车位</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">超值租</a-card-grid>
+    </a-card>
     <a-row>
       <h4>卖闲置也能换钱</h4>
       <a-col span="24">
-        <a-button>发布闲置</a-button>
+        <a-button @click="() => { this.addDailyModel = !this.addDailyModel }">发布闲置</a-button>
       </a-col>
     </a-row>
+    <a-modal
+      title="发布闲置"
+      v-model="addDailyModel"
+      @ok=""
+    >
+      <a-form
+        id="add-daily"
+        :form="form"
+        @submit="handleSubmit"
+      >
+        <a-form-item
+          label="标题"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="[
+          'note',
+          {rules: [{ required: true, message: '请输入标题' }]}
+        ]"
+          />
+        </a-form-item>
+        <a-form-item
+          label="文章内容"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 19 }"
+        >
+          <a-textarea placeholder="请输入文章内容" :rows="4"
+          v-decorator="[
+          'note',
+          {rules: [{ required: true, message: '请输入描述内容' }]}
+        ]"></a-textarea>
+        </a-form-item>
+<!--        封面-->
+        <a-form-item
+          v-bind="fff"
+          label="请上传封面图片"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 19 }"
+          extra="只能上传一张"
+        >
+          <a-upload
+            v-decorator="['upload', {
+          valuePropName: 'fileList',
+          getValueFromEvent: normFile,
+        }]"
+            name="cover"
+            action=""
+            list-type="picture"
+          >
+            <a-button>
+              <a-icon type="upload" /> 上传封面图片
+            </a-button>
+          </a-upload>
+        </a-form-item>
+        <a-form-item
+          v-bind="dd"
+          label="请上详情图片"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 19 }"
+          extra="上传一张或多张"
+        >
+          <a-upload
+            v-decorator="['upload', {
+          valuePropName: 'fileList',
+          getValueFromEvent: normFile,
+        }]"
+            name="cover"
+            action=""
+            list-type="picture"
+          >
+            <a-button>
+              <a-icon type="upload" /> 上传详情图片
+            </a-button>
+          </a-upload>
+        </a-form-item>
+      </a-form>
+    </a-modal>
     <a-tabs defaultActiveKey="1">
       <a-tab-pane tab="新鲜" key="2"><a-row style="padding-top: 50px;">
         <a-col :span="8" v-for="c in cartList" :key='c.daily_id'>
@@ -178,7 +144,8 @@
       return {
         top: 20,
         cartList: [{ dailyId: '111' }, { dailyId: '2' }, { dailyId: '3' }, { dailyId: '4' }],
-        totalNum:200
+        totalNum:200,
+        addDailyModel:false
       }
     },
     beforeCreate:async function(){

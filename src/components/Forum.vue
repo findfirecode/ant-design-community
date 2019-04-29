@@ -151,7 +151,7 @@
 <!--      </a-card>-->
 <!--    </template>-->
 <!--    </a-tab-pane>-->
-      <a-tab-pane tab="关注" key="3">待补充</a-tab-pane>
+      <a-tab-pane tab="排行榜" key="3">待补充</a-tab-pane>
     </a-tabs>
   </div>
 </template>
