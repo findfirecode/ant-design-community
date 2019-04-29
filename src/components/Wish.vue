@@ -1,8 +1,31 @@
 <template>
   <div class="container">
     <a-affix :offsetTop="top">
-      <a-button type="primary" @click="" :style="{ position: 'absolute', top: '10%', right: '10px'}"><a-icon type="plus"/> 添加</a-button>
+      <a-button type="primary" @click="() => { this.addWishModel = !this.addWishModel }"><a-icon type="plus"/> 添加</a-button>
     </a-affix>
+    <a-modal
+      title="心愿"
+      v-model="addWishModel"
+      @ok="polish"
+      :destroyOnClose="true"
+    >
+      <a-form
+        id="add-daily"
+        :form="form"
+      >
+        <a-form-item
+          label="心愿"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-textarea placeholder="请输入文章内容" :rows="4"
+                      v-decorator="[
+          'content',
+          {rules: [{ required: true, message: '请输入心愿' }]}
+        ]"></a-textarea>
+        </a-form-item>
+      </a-form>
+    </a-modal>
     <ul>
       <li v-for="wish in list">
         <a>
@@ -21,7 +44,8 @@
     data () {
       return {
         list: [],
-        top: '20'
+        top: '20',
+        addWishModel:false
       }
     },
     created () {
@@ -35,6 +59,9 @@
       }
     },
     methods: {
+      polish(){
+        this.addWishModel = !this.addWishModel
+      }
     },
     mounted () {
     }

@@ -9,14 +9,19 @@
     </div>
     <a-tabs defaultActiveKey="1">
       <a-tab-pane tab="实时" key="1">
-        <div style="display: flex;margin-top: 40px">
-        <a-input-search
-          placeholder="请输入评论内容"
-          v-model="inputValue"
-          @search="onSearch"
-          enterButton
-        ></a-input-search>
-        <a-button @click="clearInput">Cancel</a-button></div>
+        <div style="margin-top: 40px">
+          <a-affix :offsetTop="10">
+            <a-input-search
+              placeholder="请输入评论内容"
+              v-model="inputValue"
+              @search="onSearch"
+              style="width: 80%;"
+              enterButton
+            ></a-input-search>
+            <a-button @click="clearInput">取消</a-button>
+            <a-button @click="() => { this.addForumModel = !this.addForumModel }">发布帖子</a-button>
+          </a-affix>
+        </div>
         <a-comment v-for="(c, index) in commentList" :key="c.comments_id">
           <template slot="actions" style="text-align: right;">
             <span @click="reply(c)">回复</span>
@@ -115,7 +120,8 @@
           <a-pagination showQuickJumper :defaultCurrent="1" :total="totalNum" @change="chagePage" />
         </template>
       </a-tab-pane>
-<!--      <a-tab-pane tab="圈子" key="2"><template>-->
+      <a-tab-pane tab="圈子" key="2">
+<!--        <template>-->
 <!--      <a-card title="我的圈子">-->
 <!--        <a-card-grid style="width:25%;textAlign:'center'"><a-icon type="plus" />新建圈子</a-card-grid>-->
 <!--        <a-card-grid style="width:25%;textAlign:'center'">Content</a-card-grid>-->
@@ -150,9 +156,59 @@
 <!--        </a-row>-->
 <!--      </a-card>-->
 <!--    </template>-->
-<!--    </a-tab-pane>-->
-      <a-tab-pane tab="排行榜" key="3">待补充</a-tab-pane>
+    </a-tab-pane>
+      <a-tab-pane tab="排行榜" key="3">
+        <a-list
+          itemLayout="horizontal"
+          :dataSource="paihangbang"
+        >
+          <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-list-item-meta
+              description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+            >
+              <a slot="title" href="https://vue.ant.design/">{{item.title}}</a>
+              <a-avatar slot="avatar" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            </a-list-item-meta>
+          </a-list-item>
+        </a-list>
+      </a-tab-pane>
     </a-tabs>
+    <a-modal
+      title="发布帖子"
+      v-model="addForumModel"
+      @ok="polish"
+      :destroyOnClose="true"
+    >
+      <a-form
+        id="add-daily"
+        :form="form"
+      >
+        <a-form-item
+          label="标题"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="[
+          'title',
+          {rules: [{ required: true, message: '请输入标题' }]}
+        ]"
+          />
+        </a-form-item>
+        <a-form-item
+          label="内容"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="[
+          'content',
+          {rules: [{ required: true, message: '请输入内容' }]}
+        ]"
+          />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -178,16 +234,33 @@
         moment,
         totalNum:0,
         value: '',
-        inputValue:''
+        inputValue:'',
+        paihangbang:[
+          {
+            title: 'Ant Design Title 1',
+          },
+          {
+            title: 'Ant Design Title 2',
+          },
+          {
+            title: 'Ant Design Title 3',
+          },
+          {
+            title: 'Ant Design Title 4',
+          },
+        ],
+       form: this.$form.createForm(this),
+        addForumModel:false
       }
     },
-    // beforeCreate: async function() {
-    //   this.commentList = await axios.get('/frontend/comments/list',
-    //     {params:{ pageNo: 1,
-    //       pageSize:10,
-    //     }})
-    //   this.totalNum = await axios.get('/frontend/comments/total')
-    // },
+    beforeCreate: async function() {
+      const result = await axios.get('/frontend/comments/list',
+        {params:{ pageNo: 1,
+            pageSize:10,
+          }})
+      this.commentList = result.records
+      this.totalNum =  result.total
+    },
     methods: {
        getList(params){
         console.log(params)
@@ -243,6 +316,9 @@
         this.submitting = false
 
       },
+      polish() {
+        this.addForumModel = !this.addForumModel
+      }
     }
   }
 </script>

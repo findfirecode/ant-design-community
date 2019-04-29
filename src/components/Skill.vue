@@ -1,8 +1,5 @@
 <template>
   <div>
-    <a-affix :offsetTop="top">
-      <a-button type="primary" @click="" :style="{ position: 'absolute', top: '20%', right: '10px'}"><a-icon type="cloud-upload"/> 上传</a-button>
-    </a-affix>
     <a-row>
       <a-col :span="8" v-for="c in cartList" :key='c.skillId'>
         <a-card
@@ -25,7 +22,6 @@
             <a-avatar slot="avatar" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
           </a-card-meta>
         </a-card>
-
       </a-col>
     </a-row>
   </div>
