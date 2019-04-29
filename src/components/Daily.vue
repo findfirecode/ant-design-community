@@ -61,18 +61,20 @@
           extra="只能上传一张"
         >
           <a-upload
-            v-decorator="['upload', {
-          valuePropName: 'fileList',
-          getValueFromEvent: normFile,
-        }]"
-            name="cover"
-            action=""
-            list-type="picture"
+            action="http://localhost:8080/jeecg-boot/sys/common/upload"
+            listType="picture-card"
+            :fileList="coverList"
+            @preview="handlePreview"
+            @change="handleChange"
           >
-            <a-button>
-              <a-icon type="upload" /> 上传封面图片
-            </a-button>
+            <div v-if="coverList.length === 0">
+              <a-icon type="plus" />
+              <div class="ant-upload-text">上传封面</div>
+            </div>
           </a-upload>
+          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+            <img alt="example" style="width: 100%" :src="previewImage" />
+          </a-modal>
         </a-form-item>
         <a-form-item
           v-bind="dd"
@@ -145,7 +147,10 @@
         top: 20,
         cartList: [{ dailyId: '111' }, { dailyId: '2' }, { dailyId: '3' }, { dailyId: '4' }],
         totalNum:200,
-        addDailyModel:false
+        addDailyModel:false,
+        previewVisible: false,
+        previewImage: '',
+        coverList: [],
       }
     },
     beforeCreate:async function(){
@@ -170,7 +175,18 @@
       },
       chagePage() {
 
-      }
+      },
+      handleCancel () {
+        this.previewVisible = false
+      },
+      handlePreview (file) {
+        this.previewImage = file.url || file.thumbUrl
+        this.previewVisible = true
+      },
+      handleChange ({ fileList }) {
+        console.log('fileList--------',fileList)
+        this.fileList = fileList
+      },
     }
   }
 </script>
