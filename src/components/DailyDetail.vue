@@ -7,7 +7,7 @@
     <div class="imgDispaly">
       <a-carousel arrows dotsClass="slick-dots slick-thumb">
         <a slot="customPaging" slot-scope="props">
-          <img :src="baseUrl+imgUrls[0]"/>
+          <img :src="baseUrl+imgUrls[props.i]"/>
         </a>
         <div v-for="item in imgUrls">
           <img :src="baseUrl+item"/>
@@ -153,7 +153,7 @@
         {params:{
             belong_id: this.$route.params.id,
           }})
-      console.log(this.imgUrls)
+      console.log(this.dailyDetail)
     },
     methods: {
       like() {

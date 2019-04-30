@@ -40,6 +40,17 @@
           />
         </a-form-item>
         <a-form-item
+          label="价格"
+          :label-col="{ span: 5 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="[
+          'price',
+          {rules: [{ required: true, message: '请输入价格' }]}
+        ]"
+          /></a-form-item>
+        <a-form-item
           label="文章内容"
           :label-col="{ span: 5 }"
           :wrapper-col="{ span: 19 }"
@@ -149,7 +160,7 @@
             <img
               :alt="c.type"
               style="height: 500px;"
-              :src='"http://localhost:8080/community/"+c.p_url'
+              :src='baseUrl+c.p_url'
               slot="cover"
 
             />
@@ -179,9 +190,9 @@
     name: 'Daily',
     data() {
       return {
-        top: 20,
-        cartList: [{ dailyId: '111' }, { dailyId: '2' }, { dailyId: '3' }, { dailyId: '4' }],
-        totalNum:200,
+        baseUrl:'http://localhost:8080/community/',
+        cartList: [],
+        totalNum:0,
         addDailyModel:false,
         previewVisible: false,
         previewImage: '',
