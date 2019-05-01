@@ -13,7 +13,7 @@
           <a-affix :offsetTop="10">
             <a-input-search
               placeholder="请输入评论内容"
-              v-model="inputValue"
+              v-model="searchValue"
               @search="onSearch"
               style="width: 80%;"
               enterButton
@@ -23,44 +23,43 @@
           </a-affix>
         </div>
         <a-comment v-for="(c, index) in commentList" :key="c.comments_id">
+          <a slot="author">{{c.name}} &nbsp <span class="comment-title">{{ c.title }}</span> &nbsp &nbsp &nbsp</a>
           <template slot="actions" style="text-align: right;">
             <span @click="reply(c)">回复</span>
             <span @click="takeComment(c, index)">查看评论</span>
             <span v-show="c.isDisplay === true" @click="() => { c.isDisplay = false}"><a-icon type="up" />收起评论</span>
           </template>
-          <a slot="author">{{c.name}}</a>
           <a-avatar
-            :src='"http://localhost:8080/community/"+c.url'
+            :src='"http://localhost:8080/community/"+c.avatar'
             :alt="c.name"
             slot="avatar"
           />
           <p class="comment-content" slot="content">{{c.content}}</p>
-          <a-tooltip slot="datetime" :title="moment(c.time).format('MMMM Do YYYY, h:mm:ss')">
+          <a-tooltip slot="datetime" :title="moment(c.create_time).format('MMMM Do YYYY, h:mm:ss')">
             <span>{{moment(c.create_time).fromNow()}}</span>
           </a-tooltip>
-
           <a-comment v-if="c.isReply">
             <a-avatar
               slot="avatar"
-              :src='"http://localhost:8080/community/"+c.url'
+              :src='"http://localhost:8080/community/"+c.avatar'
               :alt="c.name"
             />
             <div slot="content">
               <a-form-item>
-                <a-textarea :rows="4" v-model="value"></a-textarea>
+                <a-textarea :rows="4" v-model="inputValue"></a-textarea>
               </a-form-item>
               <a-form-item>
                 <a-button
                   htmlType="submit"
                   :loading="submitting"
                   @click="handleSubmit(c, index)"
-                  type="primary"
                   class="comment-button"
+                  type="primary"
                 >
                   提交
                 </a-button>
                 <a-button
-                  @click="() => { c.isReply=!c.isReply}"
+                  @click="() => { c.isReply= !c.isReply }"
                   class="comment-button"
                 >
                   取消
@@ -68,14 +67,13 @@
               </a-form-item>
             </div>
           </a-comment>
-          <a-comment v-if="c.isDisplay" v-for="comment in c.comments" :key="comment.id">
+          <a-comment v-for="comment in c.comments" v-if="c.isDisplay" :key="comment.id">
             <template slot="actions">
               <span @click="reply(comment)">回复</span>
-              <span  @click="() => { c.isDisplay = false}"><a-icon type="up" />收起评论</span>
             </template>
             <a slot="author">{{comment.name}}</a>
             <a-avatar
-              :src='"http://localhost:8080/community/"+comment.url'
+              :src='"http://localhost:8080/community/"+comment.avatar'
               :alt="comment.name"
               slot="avatar"
             />
@@ -83,16 +81,15 @@
             <a-tooltip slot="datetime" :title="moment(comment.create_time).format('MMMM Do YYYY, h:mm:ss')">
               <span>{{moment(comment.create_time).fromNow()}}</span>
             </a-tooltip>
-
             <a-comment v-if="comment.isReply">
               <a-avatar
                 slot="avatar"
-                :src='"http://localhost:8080/community/"+comment.url'
+                :src='"http://localhost:8080/community/"+comment.avatar'
                 :alt="comment.name"
               />
               <div slot="content">
                 <a-form-item>
-                  <a-textarea :rows="4" v-model="value"></a-textarea>
+                  <a-textarea :rows="4" v-model="inputValue"></a-textarea>
                 </a-form-item>
                 <a-form-item>
                   <a-button
@@ -113,7 +110,6 @@
                 </a-form-item>
               </div>
             </a-comment>
-
           </a-comment>
         </a-comment>
         <template>
@@ -221,8 +217,6 @@
     components: {ACol, ARow},
     data() {
       return {
-        action: null,
-        comments: [],
         commentList: [],
         submitting: false,
         text: '超人被蝙蝠侠杀掉了',
@@ -232,8 +226,6 @@
           { head: '恭喜田总喜提迈巴赫', content: '超人被蝙蝠侠杀掉了', key: '3' }
         ],
         moment,
-        totalNum:0,
-        value: '',
         inputValue:'',
         paihangbang:[
           {
@@ -249,8 +241,10 @@
             title: 'Ant Design Title 4',
           },
         ],
-       form: this.$form.createForm(this),
-        addForumModel:false
+        form: this.$form.createForm(this),
+        addForumModel:false,
+        searchValue:'',
+        totalNum:0
       }
     },
     beforeCreate: async function() {
@@ -262,62 +256,79 @@
       this.totalNum =  result.total
     },
     methods: {
-       getList(params){
-        console.log(params)
-        return axios.get('/frontend/comments/list',
-          {params})
-      },
       async getComments(c, index) {
-         this.commentList[index].comments = await this.getList({
-                  pageNo: 1,
-                  pageSize:10,
-                  parent_id: c.comments_id
-                })
+        const result = await axios.get('/frontend/comments/list',
+          {
+            params: {
+              pageNo: 1,
+              pageSize: 10,
+              parent_id: c.comments_id
+            }
+          })
+        c.isDisplay = await !c.isDisplay
+        this.commentList[index].comments = result.records
       },
        takeComment(c, index) {
         if (!c.isDisplay) {
           this.getComments(c, index)
         }
-        c.isDisplay = !c.isDisplay
       },
       async onSearch(value) {
-        this.commentList = await this.getList(
-          { pageNo: 1,
+         const result = await axios.get('/frontend/comments/list',
+          {
+            params: { pageNo: 1,
               pageSize:1000,
               contentCondition:value,
-            })
+            }})
+        this.commentList = result.records
       },
       async clearInput() {
         this.inputValue = ''
-        this.commentList = await this.getList({ pageNo: 1,
+        const result = await axios.get('/frontend/comments/list',
+          {
+            params: { pageNo: 1,
               pageSize:10,
-            })
+            }})
+        this.commentList = result.records
       },
       async chagePage(page, pageSize) {
-        this.commentList = await this.getList({ pageNo: page,
+        const result = await axios.get('/frontend/comments/list',
+          {
+            params: { pageNo: page,
               pageSize:pageSize,
-            })
+            }})
+        this.commentList = result.records
       },
       reply(c) {
-        console.log(c.comments_id)
         c.isReply = !c.isReply
       },
       async handleSubmit(c, index) {
-        if (!this.value) {
+        if (!this.inputValue) {
           return;
         }
         this.submitting = true
          await axios.post('/frontend/comments/add',{
-             content:c.parent_id === '-1'?this.value:`@${c.name}: ${this.value}`,
+             content:c.parent_id === '-1'?this.inputValue:`@${c.name}: ${this.inputValue}`,
            parentId:c.comments_id
            })
+        this.$message.success('回复成功');
         this.getComments(c, index)
         c.isReply = false
         this.submitting = false
 
       },
-      polish() {
+      async polish() {
         this.addForumModel = !this.addForumModel
+        this.form.validateFields(async(errors, values) => {
+          if (!errors){
+          await axios.post('/frontend/comments/add',{
+            ...values,
+            parent_id:'-1'
+          })
+            this.$message.success('发布成功');
+            this.$router.go(0)
+          }
+        })
       }
     }
   }
@@ -326,6 +337,10 @@
 <style>
   .comment-content {
     text-align: left;
+  }
+  .comment-title {
+    font-size: 18px;
+    font-weight: 800;
   }
   .ant-comment-content .ant-comment-actions {
     text-align: right;

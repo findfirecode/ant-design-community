@@ -207,7 +207,8 @@
     width: 100%;
   }
   .imgDispaly{
-    margin-bottom: 60px;
+    width: 80%;
+    margin: 60px auto;
   }
   .ant-carousel >>> .slick-dots {
     height: auto
@@ -232,5 +233,8 @@
   }
   .ant-carousel >>> .slick-thumb li.slick-active img{
     filter: grayscale(0%);
+  }
+  .custImg {
+    color: red;
   }
 </style>

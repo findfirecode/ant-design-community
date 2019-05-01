@@ -159,7 +159,7 @@
           >
             <img
               :alt="c.type"
-              style="height: 500px;"
+              style="height: 160px;width: 100%;"
               :src='baseUrl+c.p_url'
               slot="cover"
 
@@ -168,7 +168,8 @@
               :title="c.title">
               <template slot="description">
                 {{ c.content }}
-                <p class="card-p">99人感兴趣</p>
+                <p class="card-price">${{ c.price }}</p>
+                <p class="card-p">{{ c.buy_num   }}人感兴趣</p>
               </template>
               <a-avatar slot="avatar" :src='"http://localhost:8080/community/"+c.avatar'/>
             </a-card-meta>
@@ -267,5 +268,11 @@
     margin-top: 10px;
     text-align: right;
     color: rebeccapurple;
+  }
+  .card-price {
+    position: absolute;
+    bottom: 22px;
+    left: 23px;
+    font-weight: 900;
   }
 </style>
