@@ -21,8 +21,8 @@
         <a-button
           type="primary"
           style="margin-right: 10px;"
-          :ghost=true
-          @click=""
+          :ghost="!isCollect"
+          @click="collect"
         ><a-icon type="star" />收藏</a-button>
         <a-button
           type="primary"
@@ -132,39 +132,42 @@
         dailyDetail: {},
         data:{},
         avatarName: '盖世英雄',
-        likes: 0,
-        dislikes: 0,
         action: null,
         isJoin: false,
         joinText: '参入',
         imgUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         isReply: false,
         imgUrls:[],
+        isCollect:false,
         moment
       }
     },
     beforeCreate: async function(){
       const daily = await axios.get('/frontend/daily/queryById',
         {params:{
-            id: this.$route.params.id,
+            id: this.$route.query.id,
           }})
       this.dailyDetail = daily
       this.imgUrls = await axios.get('/frontend/daily/queryByBelongId',
         {params:{
-            belong_id: this.$route.params.id,
+            belong_id: this.$route.query.id,
           }})
-      console.log(this.dailyDetail)
+      const collect = await axios.get('/frontend/collect/list',
+        {params:{
+            createBy: '111',
+            keyId: this.$route.query.id,
+          }})
+      this.isCollect = await collect.result.records.length === 1
     },
     methods: {
-      like() {
-        this.likes = 1
-        this.dislikes = 0
-        this.action = 'liked'
-      },
-      dislike() {
-        this.likes = 0
-        this.dislikes = 1
-        this.action = 'disliked'
+      async collect() {
+        if(this.isCollect === false){
+          await axios.post('/frontend/collect/add',{
+            belongBy: this.dailyDetail.create_by,
+            keyId: this.$route.query.id,
+          })
+        }
+        this.isCollect = true
       },
       join() {
         this.isJoin = !this.isJoin
@@ -177,9 +180,6 @@
       back() {
         this.$router.go(-1)
       },
-      getImgUrl(i) {
-        return `${this.baseUrl}abstract0${i + 1}.jpg`
-      }
     }
   }
 </script>

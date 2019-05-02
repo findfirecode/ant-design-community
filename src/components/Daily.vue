@@ -217,8 +217,8 @@
     methods: {
       linkTo(key) {
         this.$router.push({
-          name:'dailyDetail',
-          params:{id:key}})
+          path:'/dailyDetail',
+          query:{id:key}})
       },
       chagePage() {
 

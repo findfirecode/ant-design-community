@@ -38,36 +38,7 @@
           <a-tooltip slot="datetime" :title="moment(c.create_time).format('MMMM Do YYYY, h:mm:ss')">
             <span>{{moment(c.create_time).fromNow()}}</span>
           </a-tooltip>
-          <a-comment v-if="c.isReply">
-            <a-avatar
-              slot="avatar"
-              :src='"http://localhost:8080/community/"+c.avatar'
-              :alt="c.name"
-            />
-            <div slot="content">
-              <a-form-item>
-                <a-textarea :rows="4" v-model="inputValue"></a-textarea>
-              </a-form-item>
-              <a-form-item>
-                <a-button
-                  htmlType="submit"
-                  :loading="submitting"
-                  @click="handleSubmit(c, index)"
-                  class="comment-button"
-                  type="primary"
-                >
-                  提交
-                </a-button>
-                <a-button
-                  @click="() => { c.isReply= !c.isReply }"
-                  class="comment-button"
-                >
-                  取消
-                </a-button>
-              </a-form-item>
-            </div>
-          </a-comment>
-          <a-comment v-for="comment in c.comments" v-if="c.isDisplay" :key="comment.id">
+          <a-comment v-for="comment in c.comments" v-if="c.isDisplay" :key="comment.comments_id">
             <template slot="actions">
               <span @click="reply(comment)">回复</span>
             </template>
@@ -81,35 +52,6 @@
             <a-tooltip slot="datetime" :title="moment(comment.create_time).format('MMMM Do YYYY, h:mm:ss')">
               <span>{{moment(comment.create_time).fromNow()}}</span>
             </a-tooltip>
-            <a-comment v-if="comment.isReply">
-              <a-avatar
-                slot="avatar"
-                :src='"http://localhost:8080/community/"+comment.avatar'
-                :alt="comment.name"
-              />
-              <div slot="content">
-                <a-form-item>
-                  <a-textarea :rows="4" v-model="inputValue"></a-textarea>
-                </a-form-item>
-                <a-form-item>
-                  <a-button
-                    htmlType="submit"
-                    :loading="submitting"
-                    @click="handleSubmit(comment.comments_id)"
-                    class="comment-button"
-                    type="primary"
-                  >
-                    提交
-                  </a-button>
-                  <a-button
-                    @click="() => { comment.isReply=!comment.isReply}"
-                    class="comment-button"
-                  >
-                    取消
-                  </a-button>
-                </a-form-item>
-              </div>
-            </a-comment>
           </a-comment>
         </a-comment>
         <template>
@@ -205,6 +147,19 @@
         </a-form-item>
       </a-form>
     </a-modal>
+    <a-modal
+      title="回复"
+      v-model="isReply"
+      @ok="handleSubmit"
+      :destroyOnClose="true"
+    >
+      <a-comment>
+        <div slot="content">
+          <span>回复：</span><span style="color: gray;opacity: 0.5;">{{ this.comment.content }}</span>
+          <a-textarea :rows="4" v-model="inputValue"></a-textarea>
+        </div>
+      </a-comment>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -218,7 +173,6 @@
     data() {
       return {
         commentList: [],
-        submitting: false,
         text: '超人被蝙蝠侠杀掉了',
         adviceList: [
           { head: '10月27停水', content: '超人被蝙蝠侠杀掉了', key: '1' },
@@ -226,7 +180,6 @@
           { head: '恭喜田总喜提迈巴赫', content: '超人被蝙蝠侠杀掉了', key: '3' }
         ],
         moment,
-        inputValue:'',
         paihangbang:[
           {
             title: 'Ant Design Title 1',
@@ -243,7 +196,10 @@
         ],
         form: this.$form.createForm(this),
         addForumModel:false,
+        isReply:false,
         searchValue:'',
+        comment:{},
+        inputValue:'',
         totalNum:0
       }
     },
@@ -267,8 +223,10 @@
           })
         c.isDisplay = await !c.isDisplay
         this.commentList[index].comments = result.records
+        // this.commentList = [...this.commentList]
+
       },
-       takeComment(c, index) {
+      takeComment(c, index) {
         if (!c.isDisplay) {
           this.getComments(c, index)
         }
@@ -283,7 +241,7 @@
         this.commentList = result.records
       },
       async clearInput() {
-        this.inputValue = ''
+        this.searchValue = ''
         const result = await axios.get('/frontend/comments/list',
           {
             params: { pageNo: 1,
@@ -299,23 +257,29 @@
             }})
         this.commentList = result.records
       },
-      reply(c) {
-        c.isReply = !c.isReply
+      reply(comment) {
+        this.isReply = !this.isReply
+        this.comment = comment
       },
-      async handleSubmit(c, index) {
+      async handleSubmit() {
         if (!this.inputValue) {
           return;
         }
-        this.submitting = true
-         await axios.post('/frontend/comments/add',{
-             content:c.parent_id === '-1'?this.inputValue:`@${c.name}: ${this.inputValue}`,
-           parentId:c.comments_id
-           })
+        await axios.post('/frontend/comments/add',{
+          content:this.comment.parent_id === '-1'?this.inputValue:`@${this.comment.name}: ${this.inputValue}`,
+          parentId:this.comment.parent_id === '-1'?this.comment.comments_id:this.comment.parent_id
+        })
         this.$message.success('回复成功');
-        this.getComments(c, index)
-        c.isReply = false
-        this.submitting = false
-
+        this.isReply = !this.isReply
+        this.refleshComments()
+      },
+      async refleshComments() {
+        const result = await axios.get('/frontend/comments/list',
+          {params:{ pageNo: 1,
+              pageSize:10,
+            }})
+        this.commentList = result.records
+        this.totalNum =  result.total
       },
       async polish() {
         this.addForumModel = !this.addForumModel
