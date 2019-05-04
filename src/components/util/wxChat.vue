@@ -2,7 +2,6 @@
 //依赖scrollLoader组件, 依赖指令v-emotion（实现请查看main.js）
 
 //参数：
-// width               组件宽度，默认450
 // wrapBg              外层父元素背景颜色，默认#efefef
 // maxHeight           展示窗口最高高度, 默认900
 // contactAvatarUrl    好友头像url
@@ -187,22 +186,27 @@
             </div>
 
             <div class="title" v-if="dataArray && dataArray.length>0">
+              <a-icon type="left" style="position: absolute;top: 10px;left: 10px;font-size: 25px;cursor: pointer" @click="() => { this.$router.go(-1)}"></a-icon>
                 <p v-text="options.contactNickname"></p>
             </div>
+
+            <a-affix>
+              <a-button type="primary" style="width: 100%;color: black;">继续购买</a-button>
+            </a-affix>
             <!-- main -->
           <ScrollLoader :minHeight="minHeight" @scroll-to-top="refresh" @scroll-to-botton="infinite" class="container-main" v-if="dataArray && dataArray.length>0" :style="{maxHeight: options.maxHeight-50 + 'px'}">
                 <div class="message">
                     <ul>
-                        <li v-for="(message, index) in dataArray" :key="message.id" :class="message.direction===2?'an-move-right':'an-move-left'">
-                            <p class="time"> <span v-text="message.ctime"></span> </p>
+                        <li v-for="(message, index) in dataArray" :key="index" :class="message.direction===2?'an-move-right':'an-move-left'">
+                            <p class="time"> <span v-text="message.create_time"></span> </p>
                             <p class="time system" v-if="message.type===10000"> <span v-html="message.content"></span> </p>
                             <div :class="'main' + (message.direction===2?' self':'')" v-else>
                                 <img class="avatar" width="45" height="45" :src="message.direction===2? options.ownerAvatarUrl: options.contactAvatarUrl">
                                 <!-- 文本 -->
-                                <div class="text" v-emotion="message.content" v-if="message.type===1"></div>
+                                <div class="text" v-emotion="message.content" v-if="message.type==='1'"></div>
 
                                 <!-- 图片 -->
-                                <div class="text" v-else-if="message.type===2">
+                                <div class="text" v-else-if="message.type==='2'">
                                     <img :src="message.content" class="image" alt="聊天图片">
                                 </div>
 
@@ -211,13 +215,9 @@
                                 </div>
                             </div>
                         </li>
-                        
                     </ul>
                 </div>
-
             </ScrollLoader>
-
-
         </div>
     </div>
 </template>
@@ -238,10 +238,6 @@
               type: String,
               default: 'Mystic Faces'
             },
-            data: {
-              type: Array,
-              required: true
-            },
             wrapBg: {
               type: String,
               default: '#efefef'
@@ -258,14 +254,18 @@
             }
           }
         },
+        datas: {
+          type: Array,
+          required: true
+        },
+        sendValue: {
+          type: Object,
+          default: {}
+        },
         getUpperData: {
           type: Function,
           required: true
         },
-        getUnderData: {
-          type: Function,
-          required: true
-        }
       },
       data() {
         return {
@@ -274,9 +274,19 @@
 
           isRefreshedAll: false,
           isLoadedAll: false,
-    
+
           minHeight: 700,
           dataArray: []
+        }
+      },
+
+      watch:{
+        sendValue: {
+          deep: true,
+          handler: function (newVal,oldVal){
+           this.dataArray.push(newVal)
+            document.getElementById('window-view-container').scrollTop = document.getElementById('window-view-container').offsetHeight;
+          }
         }
       },
 
@@ -284,14 +294,14 @@
         this.initData();
       },
       mounted() {
-            // document.getElementsByTagName('body')[0].scrollTop=0;
+        this.initData();
         this.minHeight = document.getElementById('window-view-container').offsetHeight;
         this.options.maxHeight = document.getElementById('window-view-container').offsetHeight;
       },
 
       methods: {
         initData() {
-          this.dataArray = this.dataArray.concat(this.options.data);
+          this.dataArray = this.dataArray.concat(this.datas);
         },
 
             // 向上拉刷新
@@ -306,11 +316,12 @@
             me.isUpperLaoding = false;
             return;
           }
-    
+
           try {
             this.getUpperData().then(function(data) {
               if (data.length == 0) {
                 me.isRefreshedAll = true;
+                me.$message.warning("已经到最顶部")
                 done(true);
               } else {
                 me.dataArray = data.reverse().concat(me.dataArray); // 倒序合并
@@ -318,37 +329,17 @@
               }
             })
           } catch (error) {
-            console.error('wxChat: props "getUpperData" must return a promise object!')
+            me.$message.warning('wxChat: props "getUpperData" must return a promise object!')
           }
+          console.log('arrat---',this.datas)
           me.isUpperLaoding = false;
         },
 
             // 向下拉加载
         infinite(done) {
           const me = this;
-          if (me.isUnderLaoding) {
-            return;
-          }
-          if (me.isLoadedAll) {
-            done(true);
-            me.isUnderLaoding = false;
-            return;
-          }
-    
-          try {
-            this.getUnderData().then(function(data) {
-              if (data === 0) {
-                me.isLoadedAll = true;
-                done(true);
-              } else {
-                done();
-                me.dataArray = me.dataArray.concat(data); // 直接合并
-              }
-            })
-          } catch (error) {
-            console.error('wxChat: props "getUnderData" must return a promise object!')
-          }
           me.isUnderLaoding = false;
+          done(true);
         }
 
       }

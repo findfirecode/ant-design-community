@@ -212,7 +212,7 @@
       this.totalNum =  result.total
     },
     methods: {
-      async getComments(c, index) {
+    async getComments(c, index) {
         const result = await axios.get('/frontend/comments/list',
           {
             params: {
@@ -223,8 +223,6 @@
           })
         c.isDisplay = await !c.isDisplay
         this.commentList[index].comments = result.records
-        // this.commentList = [...this.commentList]
-
       },
       takeComment(c, index) {
         if (!c.isDisplay) {
@@ -267,7 +265,9 @@
         }
         await axios.post('/frontend/comments/add',{
           content:this.comment.parent_id === '-1'?this.inputValue:`@${this.comment.name}: ${this.inputValue}`,
-          parentId:this.comment.parent_id === '-1'?this.comment.comments_id:this.comment.parent_id
+          parentId:this.comment.parent_id === '-1'?this.comment.comments_id:this.comment.parent_id,
+          type: 'comments',
+          userId: this.$store.state.user.user_id
         })
         this.$message.success('回复成功');
         this.isReply = !this.isReply
@@ -287,6 +287,8 @@
           if (!errors){
           await axios.post('/frontend/comments/add',{
             ...values,
+            type: 'dailyDetail',
+            userId: this.$store.state.user.user_id,
             parent_id:'-1'
           })
             this.$message.success('发布成功');

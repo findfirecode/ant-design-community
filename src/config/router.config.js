@@ -44,6 +44,12 @@ export  const communityMap = [
         meta: { title: '生活技能详情页', keepAlive: true, permission: ['user'] }
       },
       {
+        path: '/chat',
+        name: 'chat',
+        component: () => import('@/components/chat'),
+        meta: { title: '聊天頁面', hideHeader: true, keepAlive: true, permission: ['user'] },
+      },
+      {
         path: '/wish',
         name: 'wish',
         component: () => import('@/components/Wish'),

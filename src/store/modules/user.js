@@ -10,7 +10,8 @@ const user = {
     username: '',
     realname: '',
     welcome: '',
-    avatar: '',
+    avatar: 'avatar/3.jpg',
+    user_id: '111',
     permissionList: [],
     info: {}
   },

@@ -1,7 +1,7 @@
 <template>
   <div style="background-color: #ececec; ">
     <a-card title="所有分类">
-      <a-card-grid style="width:25%;textAlign:'center'">二手手机</a-card-grid>
+      <a-card-grid style="width:25%;textAlign:'center'">全部</a-card-grid>
       <a-card-grid style="width:25%;textAlign:'center'">数码</a-card-grid>
       <a-card-grid style="width:25%;textAlign:'center'">游戏交易</a-card-grid>
       <a-card-grid style="width:25%;textAlign:'center'">二手图书</a-card-grid>

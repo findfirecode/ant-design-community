@@ -27,9 +27,9 @@
         <a-button
           type="primary"
           style="margin-right: 10px;"
-          :ghost="!isJoin"
+          :ghost="true"
           @click="join"
-        ><a-icon type="flag" />{{ this.joinText }}</a-button>
+        ><a-icon type="flag" />购买</a-button>
         <a-button
           type="primary"
           style="margin-right: 10px;"
@@ -44,80 +44,64 @@
         ><a-icon type="rollback" />返回</a-button>
       </div>
     </div>
-    <a-comment v-if="isReply">
-      <a-avatar
-        slot="avatar"
-        :src="imgUrl"
-        :alt="avatarName"
-      />
-      <div slot="content">
-        <a-form-item>
-          <a-textarea :rows="4" @change="handleChange()" :value="value" ></a-textarea>
-        </a-form-item>
-        <a-form-item>
-          <a-button
-            htmlType="submit"
-            :loading="submitting"
-            @click="handleSubmit()"
-            type="primary"
-            class="comment-button"
-          >
-            提交
-          </a-button>
-          <a-button
-            @click="() => { this.isReply = !this.isReply }"
-            class="comment-button"
-          >
-            取消
-          </a-button>
-        </a-form-item>
-      </div>
-    </a-comment>
     <a-list
       style="background-color: #ececec;"
       class="comment-list"
-      :header="`${data.length} 条回复`"
+      :header="`${this.commentList.length} 条回复`"
       itemLayout="horizontal"
-      :dataSource="data"
+      :dataSource="commentList"
     >
       <a-list-item slot="renderItem" slot-scope="item, index">
         <a-comment
-          :author="item.author"
-          :avatar="item.avatar"
+          :author="item.name"
+          :avatar='"http://localhost:8080/community/"+item.avatar'
         >
-          <template slot="actions">
-                   <span>
-                    <a-tooltip title="Like">
-                      <a-icon
-                        type="like"
-                        :theme="action === 'liked' ? 'filled' : 'outlined'"
-                        @click="like"
-                      />
-                    </a-tooltip>
-                    <span style="padding-left: 8px;cursor: auto;">
-                      {{likes}}
-                    </span>
-                  </span>
-            <span>
-                    <a-tooltip title="Dislike">
-                      <a-icon
-                        type="dislike"
-                        :theme="action === 'disliked' ? 'filled' : 'outlined'"
-                        @click="dislike"
-                      />
-                    </a-tooltip>
-                    <span style="padding-left: 8px;cursor: auto">
-                      {{dislikes}}
-                    </span>
-                  </span>
-          </template>
+<!--          <template slot="actions">-->
+<!--                   <span>-->
+<!--                    <a-tooltip title="Like">-->
+<!--                      <a-icon-->
+<!--                        type="like"-->
+<!--                        :theme="action === 'liked' ? 'filled' : 'outlined'"-->
+<!--                        @click="like"-->
+<!--                      />-->
+<!--                    </a-tooltip>-->
+<!--                    <span style="padding-left: 8px;cursor: auto;">-->
+<!--                      {{likes}}-->
+<!--                    </span>-->
+<!--                  </span>-->
+<!--                    <span>-->
+<!--                    <a-tooltip title="Dislike">-->
+<!--                      <a-icon-->
+<!--                        type="dislike"-->
+<!--                        :theme="action === 'disliked' ? 'filled' : 'outlined'"-->
+<!--                        @click="dislike"-->
+<!--                      />-->
+<!--                    </a-tooltip>-->
+<!--                    <span style="padding-left: 8px;cursor: auto">-->
+<!--                      {{dislikes}}-->
+<!--                    </span>-->
+<!--                  </span>-->
+<!--          </template>-->
           <p slot="content">{{item.content}}</p>
-          <a-tooltip slot="datetime" :title="item.datetime.format('YYYY-MM-DD HH:mm:ss')">
-            <span>{{item.datetime.fromNow()}}</span>
+          <a-tooltip slot="datetime" :title="moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')">
+            <span>{{ moment(item.create_time).fromNow() }}</span>
           </a-tooltip>
         </a-comment>
       </a-list-item>
     </a-list>
+
+    <a-modal
+      title="评论"
+      v-model="isReply"
+      @ok="handleSubmit"
+      :destroyOnClose="true"
+    >
+      <a-comment>
+        <div slot="content">
+          <a-textarea :rows="4" v-model="inputValue"></a-textarea>
+        </div>
+      </a-comment>
+    </a-modal>
   </div>
 </template>
 
@@ -130,15 +114,15 @@
       return {
         baseUrl: 'http://localhost:8080/community/',
         dailyDetail: {},
-        data:{},
-        avatarName: '盖世英雄',
+        commentList:[],
         action: null,
-        isJoin: false,
-        joinText: '参入',
         imgUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
         isReply: false,
         imgUrls:[],
+        inputValue: '',
         isCollect:false,
+        likes:0,
+        dislike:0,
         moment
       }
     },
@@ -158,6 +142,14 @@
             keyId: this.$route.query.id,
           }})
       this.isCollect = await collect.result.records.length === 1
+
+      const comments = await axios.get('/frontend/comments/list',
+        {params:{ pageNo: 1,
+            pageSize:10,
+            type: 'dailyDetail'
+          }})
+      this.commentList = comments.records
+      console.log('comments', this.commentList)
     },
     methods: {
       async collect() {
@@ -170,15 +162,34 @@
         this.isCollect = true
       },
       join() {
-        this.isJoin = !this.isJoin
-        if (this.isJoin) {
-          this.joinText = '退出'
-        } else {
-          this.joinText = '参与'
-        }
+        this.$router.push({
+          path:'/chat',
+          query:{id:this.dailyDetail.create_by}})
       },
       back() {
         this.$router.go(-1)
+      },
+      async handleSubmit() {
+        if (!this.inputValue) {
+          return;
+        }
+        await axios.post('/frontend/comments/add',{
+          content:this.inputValue,
+          type: 'dailyDetail',
+          userId: this.$store.state.user.user_id,
+          parentId: -1
+        })
+        this.$message.success('回复成功');
+        this.isReply = !this.isReply
+        this.refleshComments()
+      },
+      async refleshComments() {
+        const result = await axios.get('/frontend/comments/list',
+          {params:{ pageNo: 1,
+              pageSize:10,
+              type: 'dailyDetail'
+            }})
+        this.commentList = result.records
       },
     }
   }
