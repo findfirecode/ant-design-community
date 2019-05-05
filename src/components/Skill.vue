@@ -153,7 +153,7 @@
       clearImg() {
 
       },
-      handleSubmit() {
+      handleSubmit(e) {
         e.preventDefault();
         this.form.validateFields(async(errors, values) => {
           if (!errors){
@@ -161,8 +161,8 @@
               skillId:this.fileData.belong_id,
               ...values
             }
-            await axios.post('/frontend/daily/add', daily)
-            this.addDailyModel = false
+            await axios.post('/frontend/skill/add', daily)
+            this.addSkillModel = false
             this.$message.success('发布成功');
             this.$router.go(0)
           }
