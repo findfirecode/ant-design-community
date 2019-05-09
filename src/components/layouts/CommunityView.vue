@@ -8,6 +8,10 @@
         :style="{ lineHeight: '64px' }"
         @click="handleClick"
       >
+        <a-menu-item key="home">
+          <a-icon type="home"/>
+          首页
+        </a-menu-item>
         <a-menu-item key="forum">
           <a-icon type="coffee"/>
           论坛讨论

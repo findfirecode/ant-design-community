@@ -1,165 +1,177 @@
-<!--
 <template>
-  <div class="home">
-    <div class="banner">
-      <img alt="Vue logo" style="width: 64px; height: 64px" src="../assets/logo.png">
-      <h3 style="margin-top: 1rem">Welcome to Your Vue.js App</h3>
-    </div>
-
-    <br/>
-
-    <h2># Trend 组件 </h2>
-
-    <a-divider> 正常 </a-divider>
-
-    <a-card>
-
-      <trend flag="up" style="margin-right: 16px;">
-        <span slot="term">工资</span>
-        5%
-      </trend>
-      <trend flag="up" style="margin-right: 16px;">
-        <span slot="term">工作量</span>
-        50%
-      </trend>
-      <trend flag="down">
-        <span slot="term">身体状态</span>
-        50%
-      </trend>
-
-    </a-card>
-
-    <a-divider> 颜色反转 </a-divider>
-
-    <a-card style="margin-bottom: 3rem">
-
-      <trend flag="up" :reverse-color="true" style="margin-right: 16px;">
-        <span slot="term">工资</span>
-        5%
-      </trend>
-      <trend flag="down" :reverse-color="true" style="margin-right: 16px;">
-        <span slot="term">工作量</span>
-        50%
-      </trend>
-
-    </a-card>
-
-    <h2># AvatarList 组件 </h2>
-
-    <a-divider> AvatarList </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <avatar-list :max-length="3">
-        <avatar-list-item tips="Jake" src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" />
-        <avatar-list-item tips="Andy" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-
-      </avatar-list>
-
-      <a-divider type="vertical" style="margin: 0 16px" />
-
-      <avatar-list size="mini">
-        <avatar-list-item tips="Jake" src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" />
-        <avatar-list-item tips="Andy" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png" />
-        <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-      </avatar-list>
-    </a-card>
-
-    <h2># CountDown 组件 </h2>
-
-    <a-divider> CountDown </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <count-down
-        style="font-size: 2rem"
-        :target="new Date().getTime() + 3000000"
-        :on-end="onEndHandle">
-      </count-down>
-
-      <a-divider type="vertical" style="margin: 0 16px" />
-
-      <count-down
-        style="font-size: 2rem"
-        :target="new Date().getTime() + 10000"
-        :on-end="onEndHandle2">
-      </count-down>
-    </a-card>
-
-    <h2># Ellipsis 组件 </h2>
-
-    <a-divider> Ellipsis </a-divider>
-    <a-card style="margin-bottom: 3rem">
-      <ellipsis :length="100" tooltip>
-        There were injuries alleged in three cases in 2015, and a
-        fourth incident in September, according to the safety recall report. After meeting with US regulators in October, the firm decided to issue a voluntary recall.
-      </ellipsis>
-    </a-card>
-
-    <h2># NumberInfo 组件 </h2>
-
-    <a-divider> NumberInfo </a-divider>
-    <a-card>
-      <number-info
-        :sub-title="() => { return 'Visits this week' }"
-        :total="12321"
-        status="up"
-        :sub-total="17.1"></number-info>
-    </a-card>
+  <div>
+    <a-row :gutter="16">
+      <a-col :span="3" style="margin: 20px 0">
+        <a-card title="家政服务" :bordered=false>
+          <p>card content</p>
+        </a-card>
+      </a-col>
+      <a-col :span="3" style="margin: 20px 0">
+        <a-card title="家教指导" :bordered=false>
+          <p>card content</p>
+        </a-card>
+      </a-col>
+      <a-col :span="3" style="margin: 20px 0">
+        <a-card title="二手交易" :bordered=false>
+          <p>card content</p>
+        </a-card>
+      </a-col>
+      <a-col :span="3" style="margin: 20px 0">
+        <a-card title="二手交易" :bordered=false>
+          <p>card content</p>
+        </a-card>
+      </a-col>
+      <a-col :span="3" style="margin: 20px 0">
+        <a-card title="二手交易" :bordered=false>
+          <p>card content</p>
+        </a-card>
+      </a-col>
+      <a-col :span="3" style="margin: 20px 0">
+        <a-card title="二手交易" :bordered=false>
+          <p>card content</p>
+        </a-card>
+      </a-col>
+      <a-carousel autoplay class="guanggai">
+        <div><h3>1</h3></div>
+        <div><h3>2</h3></div>
+        <div><h3>3</h3></div>
+        <div><h3>4</h3></div>
+      </a-carousel>
+    </a-row>
+    <a-row :gutter="16">
+      <a-col :span="16"  style="background: white;margin-bottom: 20px">
+        <a-list
+          bordered
+          :dataSource="adviceList"
+        >
+          <a-list-item slot="renderItem" slot-scope="item, index">{{item}}</a-list-item>
+          <div slot="header">消息通知</div>
+          <div slot="footer">
+            <a-button type="primary">加载更多</a-button>
+          </div>
+        </a-list>
+      </a-col>
+    </a-row>
+    <a-row :gutter="16">
+       <a-col :span="6">
+         <a-card title="房子">
+           <a class="cg-a">租房</a>
+           <a class="cg-a">整租</a>
+           <a class="cg-a">合租</a>
+           <a class="cg-a">短租</a>
+           <a class="cg-a">仓库</a>
+           <a class="cg-a">地下室</a>
+           <a class="cg-a">二手房出售</a>
+           <a class="cg-a">新房出售</a>
+         </a-card>
+       </a-col>
+       <a-col :span="6">
+         <a-card title="车位">
+           <a class="cg-a">业主车位屋出租</a>
+           <a class="cg-a">物业车位出租</a>
+           <a class="cg-a">车位售卖</a>
+         </a-card>
+       </a-col>
+       <a-col :span="6">
+         <a-card title="车位">
+           <a class="cg-a">业主车位屋出租</a>
+           <a class="cg-a">物业车位出租</a>
+           <a class="cg-a">车位售卖</a>
+         </a-card>
+       </a-col>
+    </a-row>
+    <a-row>
+      <a-col style="margin: 40px 20px 40px 0;" :span="10">
+        <a-card title="家政服务">
+          <a class="cg-a">保姆</a>
+          <a class="cg-a">清洁</a>
+          <a class="cg-a">搬家</a>
+        </a-card>
+      </a-col>
+      <a-col style="margin: 40px 0 40px 20px;" :span="10">
+        <a-card title="家教指导服务">
+          <a class="cg-a">作业辅导</a>
+          <a class="cg-a">晚托机构</a>
+          <a class="cg-a"></a>
+        </a-card>
+      </a-col>
+    </a-row>
+    <a-row :gutter="12">
+      <a-col :span="12" style="background: white;">
+        <a-list
+          bordered
+          :dataSource="newsList"
+        >
+          <a-list-item slot="renderItem" slot-scope="item, index">{{item}}</a-list-item>
+          <div slot="header">精选新闻</div>
+          <div slot="footer">
+            <a-button type="primary">加载更多</a-button>
+          </div>
+        </a-list>
+      </a-col>
+      <a-col :span="12">
+        <a-carousel autoplay class="xiangqingtu">
+          <div><h3>1</h3></div>
+          <div><h3>2</h3></div>
+          <div><h3>3</h3></div>
+          <div><h3>4</h3></div>
+        </a-carousel>
+      </a-col>
+    </a-row>
+    <a-row :gutter="16" style="margin-top: 10px">
+      <a-col :span="16"  style="background: white;margin-bottom: 20px">
+        <a-list
+          bordered
+          :dataSource="adviceList"
+        >
+          <a-list-item slot="renderItem" slot-scope="item, index">{{item}}</a-list-item>
+          <div slot="header">精选文章</div>
+          <div slot="footer">
+            <a-button type="primary">加载更多</a-button>
+          </div>
+        </a-list>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
 <script>
-  // @ is an alias to /src
-
-  import Trend from '@/components/Trend'
-  import AvatarList from '@/components/AvatarList'
-  import CountDown from '@/components/CountDown/CountDown'
-  import Ellipsis from '@/components/Ellipsis'
-  import NumberInfo from '@/components/NumberInfo'
-
-  const AvatarListItem = AvatarList.AvatarItem
-
+  import ARow from "ant-design-vue/es/grid/Row";
+  import ACol from "ant-design-vue/es/grid/Col";
   export default {
-    name: 'Home',
-    components: {
-      NumberInfo,
-      Ellipsis,
-      CountDown,
-      Trend,
-      AvatarList,
-      AvatarListItem
-    },
-    data () {
+    components: {ACol, ARow},
+    data() {
       return {
-        targetTime: new Date().getTime() + 3900000
+        newsList: [
+          'Racing car sprays burning fuel into crowd.',
+          'Japanese princess to wed commoner.',
+          'Australian walks 100km after outback crash.',
+          'Man charged over missing wedding girl.',
+          'Los Angeles battles huge wildfires.',
+        ],
+        adviceList: ['超人被蝙蝠侠杀掉了','星期五小区放电影','超人被蝙蝠侠杀掉了','恭喜田总喜提迈巴赫','超人被蝙蝠侠杀掉了'],
+        customStyle: 'background: #f7f7f7;border-radius: 4px;margin-bottom: 24px;border: 0;overflow: hidden'
       }
     },
-    methods: {
-      onEndHandle () {
-        this.$message.success('CountDown callback!!!')
-      },
-      onEndHandle2 () {
-        this.$notification.open({
-          message: 'Notification Title',
-          description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-        });
-      }
-    }
   }
 </script>
 
-<style scoped>
-  .home {
-    width: 900px;
-    margin: 0 auto;
-    padding: 25px 0;
+<style>
+  .cg-a {
+    margin: 0 10px;
+    font-size: 16px;
   }
-  .home > .banner {
-    text-align: center;
-    padding: 25px 0;
-    margin: 25px 0;
+  .guanggai {
+    position: absolute;
+    right: -127px;
+    top: 18px;
+    width: 430px;
+    height: 430px;
+    background: wheat;
+  }
+  .xiangqingtu {
+    width: 600px;
+    height: 330px;
+    background: wheat;
   }
 </style>
--->

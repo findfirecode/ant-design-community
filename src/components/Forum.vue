@@ -1,12 +1,5 @@
 <template>
   <div style="background-color: #ececec; padding: 0 20px;" >
-    <div class="advice">
-      <a-collapse accordion>
-        <a-collapse-panel :header="notice.head" v-for="notice in adviceList" :key="notice.key">
-          <p>{{notice.content}}</p>
-        </a-collapse-panel>
-      </a-collapse>
-    </div>
     <a-tabs defaultActiveKey="1">
       <a-tab-pane tab="实时" key="1">
         <div style="margin-top: 40px">
@@ -174,11 +167,6 @@
       return {
         commentList: [],
         text: '超人被蝙蝠侠杀掉了',
-        adviceList: [
-          { head: '10月27停水', content: '超人被蝙蝠侠杀掉了', key: '1' },
-          { head: '星期五小区放电影', content: '超人被蝙蝠侠杀掉了', key: '2' },
-          { head: '恭喜田总喜提迈巴赫', content: '超人被蝙蝠侠杀掉了', key: '3' }
-        ],
         moment,
         paihangbang:[
           {

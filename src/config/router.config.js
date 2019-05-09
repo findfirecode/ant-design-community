@@ -14,6 +14,12 @@ export  const communityMap = [
     meta: { title: '社区主页', icon: 'user', keepAlive: true, permission: ['user'] },
     children: [
       {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/Home'),
+        meta: { title: '首页', keepAlive: true, permission: ['home'] }
+      },
+      {
         path: '/forum',
         name: 'forum',
         component: () => import('@/components/Forum'),
